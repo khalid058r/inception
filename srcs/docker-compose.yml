@@ -1,0 +1,77 @@
+services:
+  mariadb:
+    container_name: mariadb
+    build:
+      context: ./requirements/mariadb
+    image: mariadb:inception
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - inception
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+
+  wordpress:
+    container_name: wordpress
+    build:
+      context: ./requirements/wordpress
+    image: wordpress:inception
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./requirements/nginx
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
+    image: nginx:inception
+    restart: on-failure
+    volumes:
+      - wordpress_data:/var/www/html:ro
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+
+networks:
+  inception:
+    name: inception_network
+    driver: bridge
+
+# Named volumes (not bind mounts) whose data is nonetheless physically stored
+# under /home/<login>/data, per the subject's requirement: the `local` driver
+# with `o: bind` backs a real named volume object (docker volume ls/inspect)
+# by that exact host path.
+volumes:
+  wordpress_data:
+    name: wordpress_data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/kabouelf/data/wordpress
+  mariadb_data:
+    name: mariadb_data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/kabouelf/data/mariadb

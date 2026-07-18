@@ -1,0 +1,12 @@
+# Real environment values (including passwords) must never be pushed to git.
+# Only srcs/.env.example is tracked; copy it locally (see DEV_DOC.md).
+srcs/.env
+
+# Data written by the stack when run outside the mandated /home/<login>/data path
+# (e.g. local experiments) should never be committed either.
+data/
+
+# OS / editor noise
+.DS_Store
+*.swp
+*.log
