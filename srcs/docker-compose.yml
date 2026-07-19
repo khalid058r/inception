@@ -56,10 +56,7 @@ networks:
     name: inception_network
     driver: bridge
 
-# Named volumes (not bind mounts) whose data is nonetheless physically stored
-# under /home/<login>/data, per the subject's requirement: the `local` driver
-# with `o: bind` backs a real named volume object (docker volume ls/inspect)
-# by that exact host path.
+
 volumes:
   wordpress_data:
     name: wordpress_data
@@ -67,11 +64,11 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/kabouelf/data/wordpress
+      device: /home/${USER}/data/wordpress
   mariadb_data:
     name: mariadb_data
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/kabouelf/data/mariadb
+      device: /home/${USER}/data/mariadb

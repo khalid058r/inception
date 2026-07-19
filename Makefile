@@ -1,8 +1,8 @@
-LOGIN       = kabouelf
+LOGIN       = ${USER}
 DATA_PATH   = /home/$(LOGIN)/data
 
 ENV_FILE    = srcs/.env
-COMPOSE     = docker compose --env-file $(ENV_FILE) -f srcs/docker-compose.yml
+COMPOSE     = docker compose -f srcs/docker-compose.yml
 
 .PHONY: all check-config build up down stop start restart logs ps clean fclean re
 
