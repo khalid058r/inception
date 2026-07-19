@@ -10,3 +10,6 @@ data/
 .DS_Store
 *.swp
 *.log
+
+# Local reference copy, not part of the submission
+inn/
