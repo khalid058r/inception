@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -e
 
 if [ ! -f wp-config.php ]; then
     echo "[wordpress] Downloading WordPress core"
@@ -18,14 +18,10 @@ if [ ! -f wp-config.php ]; then
         --admin_password="${WP_ADMIN_PASSWORD}" \
         --admin_email="${WP_ADMIN_EMAIL}"
 
-    # Second, non-admin user (subject requires at least two DB users).
     wp user create --allow-root \
         "${WP_USER}" "${WP_USER_EMAIL}" \
         --role=author \
         --user_pass="${WP_USER_PASSWORD}"
-
-    wp option update --allow-root siteurl "https://${DOMAIN_NAME}"
-    wp option update --allow-root home "https://${DOMAIN_NAME}"
 
     echo "[wordpress] Install complete"
 else
@@ -34,5 +30,4 @@ fi
 
 chown -R www-data:www-data /var/www/html
 
-# php-fpm runs in the foreground (-F) as PID 1, no daemonizing wrapper.
 exec php-fpm8.2 -F

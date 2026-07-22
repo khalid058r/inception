@@ -4,14 +4,11 @@ DATA_PATH   = /home/$(LOGIN)/data
 ENV_FILE    = srcs/.env
 COMPOSE     = docker compose -f srcs/docker-compose.yml
 
-.PHONY: all check-config build up down stop start restart logs ps clean fclean re
 
 all: check-config build up
 
-# Fail early with a clear message instead of letting compose error out deep
-# in variable interpolation when a required local-only file is missing.
 check-config:
-	@test -f $(ENV_FILE) || (echo "Missing $(ENV_FILE) -- copy srcs/.env.example to srcs/.env and fill it in." && exit 1)
+	@test -f $(ENV_FILE) || (echo "Missing $(ENV_FILE) -- create srcs/.env and fill it in." && exit 1)
 	@mkdir -p $(DATA_PATH)/wordpress $(DATA_PATH)/mariadb
 
 build:
@@ -39,8 +36,6 @@ ps:
 
 clean: down
 
-# Removes containers, network, images and named volumes, then wipes the
-# host-side data directory. Destructive -- data is not recoverable after this.
 fclean:
 	@$(COMPOSE) down -v --rmi all
 	@sudo rm -rf $(DATA_PATH)
