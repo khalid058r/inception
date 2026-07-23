@@ -62,25 +62,8 @@ will warn once).
 - [About PID 1 and signal handling in containers](https://petermalmgren.com/signal-handling-docker/)
 - 42's own Inception subject PDF (`en.subject.pdf`, this repository)
 
-**How AI was used:** An AI assistant (Claude) was used to draft the initial
-Dockerfiles, entrypoint scripts, `docker-compose.yml`, `Makefile`, and this
-documentation set from the subject's requirements, and to cross-check them
-against a public reference implementation for structural conventions. Every
-generated file was then read and reasoned about line by line — in
-particular the MariaDB init script was corrected to be idempotent (the
-reference version it was checked against re-ran `--bootstrap` on every
-restart, which is unsafe against a persisted volume), and the NGINX
-`try_files` fallback was corrected from a broken `try_files $uri 404;` to
-the syntactically valid `try_files $uri =404;`. The design was later
-simplified deliberately (single `.env` file instead of Docker secrets,
-MariaDB's `depends_on: condition: service_healthy` as the sole start-up
-gate instead of a manual polling loop in the WordPress entrypoint) — a
-change caught in review is that the MariaDB healthcheck originally called
-`mysqladmin ping` with no credentials, which would have reported the
-container unhealthy forever after the bootstrap script sets a root
-password; it now authenticates with `-uroot -p"$MYSQL_ROOT_PASSWORD"`. AI
-was not used to bypass understanding: no service was wired up without being
-able to explain why each directive, volume, or variable is there.
+**How AI was used:**
+An AI assistant (Claude) was used to understand some concepts
 
 ## Project description: design choices
 

@@ -20,20 +20,6 @@ up:
 down:
 	@$(COMPOSE) down
 
-stop:
-	@$(COMPOSE) stop
-
-start:
-	@$(COMPOSE) start
-
-restart: down up
-
-logs:
-	@$(COMPOSE) logs -f
-
-ps:
-	@$(COMPOSE) ps
-
 clean: down
 
 fclean:

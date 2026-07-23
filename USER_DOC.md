@@ -17,8 +17,6 @@ Run these from the repository root.
 
 ```sh
 make          # build the images (first time) and start everything
-make stop     # pause all containers without removing them
-make start    # resume paused containers
 make down     # stop and remove the containers (data is kept)
 make re       # full reset: wipe everything, including stored data, and rebuild
 ```
@@ -62,7 +60,7 @@ own records.
 ## Checking that the services are running correctly
 
 ```sh
-make ps
+docker ps
 ```
 
 All three services (`mariadb`, `wordpress`, `nginx`) should show as
@@ -70,8 +68,7 @@ All three services (`mariadb`, `wordpress`, `nginx`) should show as
 loop:
 
 ```sh
-make logs                       # follow logs for every service
-docker logs mariadb              # or target a single container
+docker logs mariadb              # target a single container logs
 docker logs wordpress
 docker logs nginx
 ```

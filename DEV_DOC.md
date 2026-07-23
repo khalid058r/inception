@@ -80,10 +80,6 @@ Other targets:
 | `make build`  | Build (or rebuild) the three images only.                       |
 | `make up`     | Start containers in the background.                             |
 | `make down`   | Stop and remove containers + network (volumes/data kept).       |
-| `make stop`   | Pause containers without removing them.                         |
-| `make start`  | Resume paused containers.                                       |
-| `make logs`   | Follow logs for every service.                                  |
-| `make ps`     | Show container status.                                          |
 | `make clean`  | Alias for `down`.                                                |
 | `make fclean` | `down -v --rmi all` + `sudo rm -rf /home/kabouelf/data` (destructive). |
 | `make re`     | `fclean` then `all` — full rebuild from a clean slate.           |
